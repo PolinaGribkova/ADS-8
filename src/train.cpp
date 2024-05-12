@@ -22,8 +22,6 @@ void Train::addCage(bool Light) {
         h->next = temp;
         temp->next = first;
         first->prev = temp;
-    }
-    else {
     } else {
         first = new Cage;
         first->light = Light;
@@ -55,4 +53,3 @@ int Train::getLength() {
 int Train::getOpCount() {
     return countOp;
 }
-Footer
