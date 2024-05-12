@@ -1,53 +1,58 @@
 // Copyright 2021 NNTU-CS
 #include "train.h"
-struct Cage {
-    bool light; 
-    Cage* next;
-    Cage* prev;
-};
-
-class Train {
-private:
-    Cage* first;
-    Cage* last;
-    int countOp; 
-
-public:
-    Train() : first(nullptr), last(nullptr), countOp(0) {}
-
-    void addCage(bool light) {
-        Cage* newCage = new Cage{ light, nullptr, nullptr };
-        if (!first) {
-            first = newCage;
-            last = newCage;
+Train::Train() {
+    Cage{
+        false,
+        nullptr,
+        nullptr
+    };
+    countOp = 0;
+    first = nullptr;
+}
+void Train::addCage(bool Light) {
+    if (first) {
+        Cage* h = first;
+        while (first != h->next) {
+            h = h->next;
         }
-        else {
-            last->next = newCage;
-            newCage->prev = last;
-            last = newCage;
+        Cage* temp = new Cage;
+        temp->light = Light;
+        temp->prev = temp->next = nullptr;
+        temp->prev = h;
+        h->next = temp;
+        temp->next = first;
+        first->prev = temp;
+    }
+    else {
+    } else {
+        first = new Cage;
+        first->light = Light;
+        first->prev = first;
+        first->next = first;
+    }
+}
+int Train::getLength() {
+    int len = 0;
+    Cage* current = first;
+    current->light = true;
+    while (true) {
+        current = current->next;
+        countOp++;
+        len++;
+        if (current->light == true) {
+            current->light = false;
+            int maximum = len;
+            len = 0;
+            for (int i = 0; i < maximum; i++) {
+                current = current->prev;
+                countOp++;
+            }
+            if (current->light == false)
+                return maximum;
         }
     }
-
-    int getLength() {
-        int length = 0;
-        Cage* cage = first;
-        while (cage != nullptr) {
-            ++length;
-            cage = cage->next;
-        }
-        return length;
-    }
-
-    int getOpCount() {
-        return countOp;
-    }
-
-    ~Train() {
-        Cage* current = first;
-        while (current != nullptr) {
-            Cage* next = current->next;
-            delete current;
-            current = next;
-        }
-    }
-};
+}
+int Train::getOpCount() {
+    return countOp;
+}
+Footer
